@@ -1,0 +1,45 @@
+# TOML for crawl configuration
+
+
+version = "v0.2.1"
+
+
+[main_config]
+
+
+[main_config.user]
+save_to_filename = "spss mediation"
+excludes = [
+	'mail'
+]
+includes = [
+	'http'
+]
+main_container = "" # << fill
+
+
+[main_config.user.target]
+file = "./src/urls.txt"
+
+
+[main_config.admin]
+browserless = true
+target_depth = 2
+endpoint_save_target = { value="p" } # function="find_elements", by="TAG_NAME", 
+save_to = "./out/"
+save_filetype = ".txt"
+save_encoding = "utf-8"
+
+
+[universal]
+working_tick = 250
+base_min_msg_len = 110
+max_show_url_len = 80
+chromedriver_path = "./chromedriver_win32/chromedriver.exe"
+
+
+[worker_setting]
+workers = 8
+loading_timeout_in_sec = 30
+implicitly_wait_in_sec = 30
+slateelem_max_attempt = 3
