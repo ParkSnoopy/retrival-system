@@ -12,13 +12,11 @@ def home(request):
 
 
 def static(request, appname:str, filetype:str, filename:str):
-    print("Served from function")
     return FileResponse(
-        filename = settings.STATIC_ROOT / appname / filetype / filename
+        open( settings.STATIC_ROOT / appname / filetype / filename , 'rb' )
     )
 
 def media(request, appname:str, filetype:str, filename:str):
-    print("Served from function")
     return FileResponse(
-        filename = settings.MEDIA_ROOT / appname / filetype / filename
+        open( settings.MEDIA_ROOT / appname / filetype / filename , 'rb' )
     )
