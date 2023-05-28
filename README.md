@@ -13,6 +13,7 @@
 * added prototype crawler ( need further finetune )
 > 05.28
 * added prototype django server
+* crawler tuning for '[ndrc.gov.cn](https://www.ndrc.gov.cn/)' - result as [output.zip](.system/crawler/out/endpoint.zip).
 
 ---
 
