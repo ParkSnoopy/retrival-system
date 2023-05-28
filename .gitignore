@@ -10,6 +10,7 @@
 
 # ignore crawler cache
 .system/crawler/out/*.txt
+.system/crawler/out/*.zip
 .system/crawler/out/endpoint/*
 
 # requirements

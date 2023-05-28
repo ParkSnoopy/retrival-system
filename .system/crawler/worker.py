@@ -112,8 +112,8 @@ class Worker:
             with open( filename, 'w', encoding=ENCODING ) as output_file:
                 for result in results:
                     if result.text.strip():
-                        output_file.write(result.text)
-                        output_file.write("\n")
+                        output_file.write(result.text.replace('\n', '\n\n'))
+                        output_file.write("\n\n")
         
         self.manager.save(len(results), from_url)
         
