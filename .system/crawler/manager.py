@@ -6,7 +6,7 @@ Created on Thu May 11 15:18:54 2023
 """
 
 from selenium.webdriver import ChromeOptions
-from selenium.webdriver.chrome.webdriver import WebDriver
+# from selenium.webdriver.chrome.webdriver import WebDriver
 
 from threading import Thread
 from time import sleep
@@ -22,7 +22,14 @@ from options import (
 )
 
 from worker import Worker
-from funcs import windows_valid, _print, color_by_status, color, concat_all_urls
+from funcs import (
+    # windows_valid, 
+    _print, 
+    color_by_status, 
+    color, 
+    concat_all_urls, 
+    drop_duplicates, 
+)
 
 
 
@@ -87,8 +94,10 @@ class Manager:
         self.mkdir(SAVE_TO)
         self.mkdir(self.path)
         self.mkdir(self.path+"/endpoint")
+        self.mkdir(self.path+"/endpoint/..etc")
         
-        self.tasks_len = sum( 1 for _ in open( URL_FILE, 'r', encoding=ENCODING ) )
+        self.root_url = set( open( URL_FILE, 'r', encoding=ENCODING ).read().strip('\n').split('\n') )
+        self.tasks_len = len( self.root_url )
         self.tasks_file = open( URL_FILE, 'r', encoding=ENCODING )
         
         self.target_depth = target_depth
@@ -111,23 +120,28 @@ class Manager:
             self.output_file.write("\n")
         self.results_len += len(results)
     
-    def save(self, results:list[WebDriver], from_url):
-        if results:
-            filename = self.path+'/endpoint/'+windows_valid(from_url, _return_NAME=False)+SAVE_FTYPE
-            with open( filename, 'w', encoding=ENCODING ) as output_file:
-                output_file.write(" >> FROM >> " + from_url + "\n\n\n\n")
-                for result in results:
-                    if result.text.strip():
-                        output_file.write(result.text)
-                        output_file.write("\n")
-        self.results_len += len(results)
+    def save(self, len_results, from_url):
+        # if results:
+        #     filename = self.path+'/endpoint/'+windows_valid(from_url, _return_NAME=False)+SAVE_FTYPE
+        #     with open( filename, 'w', encoding=ENCODING ) as output_file:
+        #         output_file.write(" >> FROM >> " + from_url + "\n\n\n\n")
+        #         for result in results:
+        #             if result.text.strip():
+        #                 output_file.write(result.text)
+        #                 output_file.write("\n")
+        self.results_len += len_results
     
     def ready_next_run(self):        
         _print((100, 100, 250), "\n  Manager   :: All current task done!\n")
         _print((150, 150, 150), "  Manager   :: Continue to next tasks...")
         if self.tasks_file: self.tasks_file.close()
+        
+        self.output_file.close()
+        _print((150, 150,   0), f"  Manager   :: Dropping duplicate urls '{self.path+f'/{self.curr_depth}'+SAVE_FTYPE}' ...")
+        tasks_len = drop_duplicates( self.path+f'/{self.curr_depth}'+SAVE_FTYPE )
+        
         self.tasks_file = open( self.path+f'/{self.curr_depth}'+SAVE_FTYPE, 'r', encoding=ENCODING )
-        self.tasks_len = self.results_len
+        self.tasks_len = tasks_len
         self.dones_len = 0
         self.results_len = 0
     
@@ -155,17 +169,19 @@ class Manager:
     def crawl_for_urls(self):
         self.crawling = False
        
-        if self.target_depth <= 0:
-            self.target_depth = 1
+        if self.target_depth > 0:
         
-        for self.curr_depth in range(1, 1+self.target_depth):
-            if self.output_file: self.output_file.close()
-            self.output_file = open( self.path+f'/{self.curr_depth}'+SAVE_FTYPE, 'w', encoding=ENCODING )
-            self.check_working_status()
-            self.ready_next_run()
+            for self.curr_depth in range(1, 1+self.target_depth):
+                self.output_file = open( self.path+f'/{self.curr_depth}'+SAVE_FTYPE, 'w', encoding=ENCODING )
+                self.check_working_status()
+                self.ready_next_run()
         
-        self.tasks_file.close()
-        self.output_file.close()
+        else:
+            
+            self.curr_depth = 1
+        
+        if self.tasks_file: self.tasks_file.close()
+        if self.output_file: self.output_file.close()
         _print((152,251,152), "  Manager   :: Concatenate all urls into single file...")
         concat_all_urls(self.path)
     

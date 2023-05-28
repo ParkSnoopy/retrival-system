@@ -8,14 +8,18 @@ version = "v0.2.1"
 
 
 [main_config.user]
-save_to_filename = "spss mediation"
 excludes = [
-	'mail'
+	'mail', 
+	'/fzggw/', 
+	'/xwdt/', 
+	'/hdjl/', 
+	'/fgsj/', 
+
 ]
-includes = [
-	'http'
-]
-main_container = "" # << fill
+
+[main_config.user.includes]
+'/xxgk/' = 'OR'
+'/zchj/' = 'OR'
 
 
 [main_config.user.target]
@@ -24,9 +28,9 @@ file = "./src/urls.txt"
 
 [main_config.admin]
 browserless = true
-target_depth = 2
-endpoint_save_target = { value="p" } # function="find_elements", by="TAG_NAME", 
-save_to = "./out/"
+target_depth = 0
+endpoint_save_target = { value="article_l" } # function="find_element", by="CLASS_NAME", 
+save_to = "./out"
 save_filetype = ".txt"
 save_encoding = "utf-8"
 
@@ -39,7 +43,7 @@ chromedriver_path = "./chromedriver_win32/chromedriver.exe"
 
 
 [worker_setting]
-workers = 16
+workers = 8
 loading_timeout_in_sec = 30
 implicitly_wait_in_sec = 30
 slateelem_max_attempt = 3

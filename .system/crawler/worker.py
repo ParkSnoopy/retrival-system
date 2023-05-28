@@ -12,7 +12,6 @@ from time import sleep
 from options import (
     EXCLUDES, 
     INCLUDES, 
-    MAIN_RESULT_CONTAINER, 
     StaleElemRefExc_MAX_ATTEMPT, 
     SAVE_TARGET, 
     WORK_REST_IN_SEC, 
@@ -20,11 +19,10 @@ from options import (
     LOADING_TIMEOUT_IN_SEC, 
     IMPLICITLY_WAIT_IN_SEC, 
     SHOW_URL_LEN, 
+    ENCODING, 
 )
 
-from funcs import _print
-
-from typing import Optional
+from funcs import _print, output_path, windows_valid
 
 
 
@@ -96,7 +94,28 @@ class Worker:
     def upload_contents(self, from_url):
         results: list[WebDriver] = self.get_cleaned_contents()
         self.uploading = True
-        self.manager.save(results, from_url)
+        
+        if results:
+            try:
+                filename = output_path(
+                    sorted(
+                        tuple(
+                            self.manager.root_url
+                        ), key=len
+                    )[0], 
+                    from_url, 
+                    self.manager.path + '/endpoint/', 
+                )
+            except ValueError:
+                filename = self.manager.path + '/endpoint/..etc/' + windows_valid(from_url)
+            
+            with open( filename, 'w', encoding=ENCODING ) as output_file:
+                for result in results:
+                    if result.text.strip():
+                        output_file.write(result.text)
+                        output_file.write("\n")
+        
+        self.manager.save(len(results), from_url)
         
     def upload(self, from_url):
         if not self.manager.crawling:
@@ -106,33 +125,35 @@ class Worker:
     
     @staticmethod
     def _filter_element(element) -> bool:
-        href = element.get_attribute('href')
+        href: str = element.get_attribute('href')
+        # href = element
         if not href:
+            return False
+        if ( not href.startswith('http') ):
             return False
         if any( ( exclude in href ) for exclude in EXCLUDES ):
             return False
-        if not all( ( include in href ) for include in INCLUDES ):
+        
+        or_valid = None
+        for include, and_or in INCLUDES.items():
+            if and_or == 'AND':
+                if include not in href:
+                    return False
+            if and_or == 'OR':
+                if include in href:
+                    or_valid = True
+                else:
+                    or_valid = or_valid or False
+        
+        if or_valid == False:
             return False
         return True
     
     def get_cleaned_urls(self) -> list:
-        container_id: Optional[str] = MAIN_RESULT_CONTAINER
         
         for i in range(StaleElemRefExc_MAX_ATTEMPT):
             try:
-                if container_id:
-                    try:
-                        results_container = WebDriverWait( self.driver, timeout=IMPLICITLY_WAIT_IN_SEC ) \
-                            .until(
-                                EC.visibility_of_element_located(
-                                    ( By.ID, container_id )
-                                )
-                            )
-                    except TimeoutException:
-                        _print((255,100,100), f"  Worker {self.pk:02d} :: Timeout :: Element not located, return body element. ")
-                        results_container = self.driver
-                else:
-                    results_container = self.driver
+                results_container = self.driver
                 
                 deeper_links = [
                     element.get_attribute('href')
