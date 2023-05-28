@@ -5,10 +5,13 @@
 *.sqlite3
 
 .system/pyvenv.cfg
+.system/RetrivalSystem/pathadder.py
+
 
 # ignore crawler cache
 .system/crawler/out/*.txt
 
 # requirements
 .system/Lib/site-packages/*
+
 

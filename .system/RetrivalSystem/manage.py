@@ -19,4 +19,8 @@ def main():
 
 
 if __name__ == '__main__':
+    
+    # from pathadder import packages_root
+    # sys.path.append( packages_root )
+    
     main()
