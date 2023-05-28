@@ -8,9 +8,13 @@ Created on Sun May 28 13:55:48 2023
 from django.urls import path
 from .views import (
     home, 
+    static, 
+    media, 
 )
 
 urlpatterns = [
     path('', home, name='homepage-home'), 
     
+    path('static/<str:appname>/<str:filetype>/<str:filename>', static), 
+    path('media/<str:appname>/<str:filetype>/<str:filename>', media), 
 ]

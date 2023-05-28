@@ -11,12 +11,12 @@ def home(request):
 
 
 
-# def static(request, filename:str):
-#     return FileResponse(
-#         settings.STATIC_ROOT / filename
-#     )
+def static(request, appname:str, filetype:str, filename:str):
+    return FileResponse(
+        settings.STATIC_ROOT / appname / filetype / filename
+    )
 
-# def media(request, filename:str):
-#     return FileResponse(
-#         settings.MEDIA_ROOT / filename
-#     )
+def media(request, appname:str, filetype:str, filename:str):
+    return FileResponse(
+        settings.MEDIA_ROOT / appname / filetype / filename
+    )
