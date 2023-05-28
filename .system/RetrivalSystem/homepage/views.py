@@ -9,12 +9,14 @@ from django.conf import settings
 def home(request):
     return render(request, 'homepage/index.html')
 
-def static(request, filename:str):
-    return FileResponse(
-        settings.STATIC_ROOT / filename
-    )
 
-def media(request, filename:str):
-    return FileResponse(
-        settings.MEDIA_ROOT / filename
-    )
+
+# def static(request, filename:str):
+#     return FileResponse(
+#         settings.STATIC_ROOT / filename
+#     )
+
+# def media(request, filename:str):
+#     return FileResponse(
+#         settings.MEDIA_ROOT / filename
+#     )
