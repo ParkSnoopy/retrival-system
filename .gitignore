@@ -6,7 +6,7 @@
 
 .system/pyvenv.cfg
 .system/RetrivalSystem/pathadder.py
-
+.system/RetrivalSystem/static/*
 
 # ignore crawler cache
 .system/crawler/out/*.txt

@@ -4,7 +4,7 @@
         "builder": "NIXPACKS"
     },
     "deploy": {
-        "startCommand": "cd .system/RetrivalSystem && python manage.py migrate && gunicorn RetrivalSystem.wsgi",
+        "startCommand": "cd .system/RetrivalSystem && python manage.py migrate && py manage.py collectstatic --noinput && gunicorn RetrivalSystem.wsgi",
         "restartPolicyType": "NEVER",
         "restartPolicyMaxRetries": 0
     }
