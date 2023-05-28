@@ -15,13 +15,10 @@ import os; os.system("")
 
 from options import (
     URL_FILE, 
-    TARGET_DEPTH, 
     SAVE_FTYPE, 
     SAVE_TO, 
     ENCODING, 
     WORK_REST_IN_SEC, 
-    WORKERS, 
-    BROWSERLESS, 
 )
 
 from worker import Worker
@@ -222,20 +219,6 @@ class Manager:
 
 
 
-if __name__ == '__main__':
-    
-    manager = Manager(
-        max_workers=WORKERS, 
-        browserless=BROWSERLESS, 
-    )
-    
-    try:
-        manager.set_initial_task(URL_FILE, target_depth=TARGET_DEPTH)
-        manager.run()
-        
-    except KeyboardInterrupt:
-        _print((200,50,50), "\n\n  System    :: Keyboard Interrupted\n")
-        manager.done()
     
     
     
