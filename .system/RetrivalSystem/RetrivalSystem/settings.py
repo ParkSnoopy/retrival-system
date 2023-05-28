@@ -29,7 +29,7 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    
+    "engine.sunwoo.top", 
 ]
 
 
@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'RetrivalSystem.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -107,7 +107,7 @@ DATABASES = {
         'PORT': os.environ["PGPORT"],
     }
 }
-'''
+
 
 
 # Password validation
@@ -163,12 +163,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # # SECURE_HSTS_SECONDS = 600
 
-# CSRF_COOKIE_SECURE = True
-# SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
-# CSRF_TRUSTED_ORIGINS = [
-#     "", 
-# ]
+CSRF_TRUSTED_ORIGINS = [
+    "http://engine.sunwoo.top", 
+    "https://engine.sunwoo.top", 
+]
 
 
 
