@@ -1,4 +1,0 @@
-selenium==4.8.2
-tomli==2.0.1
-urllib3==1.26.14
-sty==1.0.4

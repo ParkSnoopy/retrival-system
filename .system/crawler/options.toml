@@ -39,7 +39,7 @@ chromedriver_path = "./chromedriver_win32/chromedriver.exe"
 
 
 [worker_setting]
-workers = 8
+workers = 2
 loading_timeout_in_sec = 30
 implicitly_wait_in_sec = 30
 slateelem_max_attempt = 3

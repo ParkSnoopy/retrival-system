@@ -148,7 +148,7 @@ class Manager:
             
             worker_task_status = tuple( worker.status() for worker in self.workers )
             status_str = "|".join( color_by_status(f" {worker.pk:02d} ", worker_task_status[i], _tail=True) for i, worker in enumerate(self.workers) )
-            _print((0, 255, 0), f"  Manager   :: Depth {self.curr_depth} :: Task allocated {self.dones_len} out of {self.tasks_len} :: Worker status {status_str} "+color((0, 255, 0), f":: Found {self.results_len}", _tail=False)+" "+("."*(i))+"   ", end='\r', _fill=False)
+            _print((64, 192, 64), f"  Manager   :: Depth {self.curr_depth} :: Task allocated {self.dones_len} out of {self.tasks_len} :: Worker status {status_str} "+color((0, 255, 0), f":: Found {self.results_len}", _tail=False)+" "+("."*(i))+"   ", end='\r', _fill=False)
             
             worker_has_task = any( worker_task_status )
         

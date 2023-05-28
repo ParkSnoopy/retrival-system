@@ -1,4 +1,7 @@
 
 *.pyc
 *.env
-crawler/out/*.txt
+.system/crawler/out/*.txt
+
+# requirements
+.system/Lib/site-packages/*
