@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "engine.sunwoo.top", 
@@ -96,15 +96,16 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+ALLOWED_HOSTS += ["127.0.0.1", ]
 '''
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ["PGDATABASE"],
-        'USER': os.environ["PGUSER"],
+        'ENGINE'  : 'django.db.backends.postgresql_psycopg2',
+        'NAME'    : os.environ["PGDATABASE"],
+        'USER'    : os.environ["PGUSER"],
         'PASSWORD': os.environ["PGPASSWORD"],
-        'HOST': os.environ["PGHOST"],
-        'PORT': os.environ["PGPORT"],
+        'HOST'    : os.environ["PGHOST"],
+        'PORT'    : os.environ["PGPORT"],
     }
 }
 
