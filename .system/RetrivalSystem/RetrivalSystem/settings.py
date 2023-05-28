@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     
@@ -45,7 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles', 
     
     # CUSTOM APPS
+    'homepage', 
+    'search', 
     
+    # DATABASE
+    'database', 
     
     # HOSTING REQUIRED PKGS
     'whitenoise', 
@@ -92,8 +96,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-ALLOWED_HOSTS += ['127.0.0.1', ]
-DEBUG = True
 '''
 DATABASES = {
     'default': {
@@ -158,19 +160,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # PRODUCTION SETTINGS
-if not DEBUG:
-    
-    # SECURE_HSTS_SECONDS = 600
-    
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SECURE = True
-    
-    CSRF_TRUSTED_ORIGINS = [
-        "", 
-    ]
 
+# # SECURE_HSTS_SECONDS = 600
 
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
+# CSRF_TRUSTED_ORIGINS = [
+#     "", 
+# ]
 
 
 
