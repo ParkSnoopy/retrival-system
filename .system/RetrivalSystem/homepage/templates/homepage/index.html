@@ -1,15 +1,62 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>
-		Homepage - Home
-	</title>
-</head>
-<body>
-	<a href="/admin/"><h3>Admin Site</h3></a>
-	<h1>Homepage - Home</h1>
-	<a href="/search/">Search - Home</a>
-</body>
-</html>
+{% extends 'common/layout.html' %}
+
+{% block title %}
+<title>
+  Homepage
+</title>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="height: 100vh; background-color:#696969;">
+
+  <div class="row" style="height: 2vh;"></div>
+
+	{% if user.is_superuser or user.is_staff %}
+	<div class="row" style="height: 10vh;">
+	  <div class="col-md-8 col-md-offset-2">
+	  	<a class="btn" href="/admin/">
+	  		<h3 style="color:#AAAAAA;">
+	  			Admin
+	  		</h3>
+	  	</a>
+	  	<a class="btn" href="/logout/">
+	  		<h4 style="color:#AAAAAA; padding-top:2vh;">
+	  			Logout
+	  		</h4>
+	  	</a>
+	  </div>
+	</div>
+	{% else %}
+	<div class="row" style="height:10;">
+		<div class="col-md-8 col-md-offset-2">
+	    <a class="btn" href="/login/">
+		  <h4 style="color:#AAAAAA; padding-top:2vh;">
+	  		Login
+	     </h4>
+	  	</a>
+	  </div>
+	</div>
+	{% endif %}
+
+	<hr style="height:1px; border-width:0; background-color:#4F4F4F; ">
+
+	<div class="row" style="height: 10vh;"></div>
+
+	<div class="row">
+	  <div class="col-md-8 col-md-offset-2">
+			<h1 lang="zh" style="color: #2F2F2F;">检索</h1>
+			<form method="POST">
+				{% csrf_token %}
+		  	<div class="form-group has-success">
+		  		<br>
+				  <input lang="zh" type="text" class="form-control" name="searchinput" style="scale:150%; width:70%; margin-left:15%; background-color:#DDDDDD;">
+				</div>
+			</form>
+			{% if status == 1 %}
+			<p lang="zh" style="color:#FF7777;">请输入检索词</p>
+			{% endif %}
+	  </div>
+	</div>
+	
+</div>
+{% endblock %}

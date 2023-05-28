@@ -101,12 +101,12 @@ ALLOWED_HOSTS += ["127.0.0.1", ]
 '''
 DATABASES = {
     'default': {
-        'ENGINE'  : 'django.db.backends.postgresql_psycopg2',
-        'NAME'    : os.environ["PGDATABASE"],
-        'USER'    : os.environ["PGUSER"],
-        'PASSWORD': os.environ["PGPASSWORD"],
-        'HOST'    : os.environ["PGHOST"],
-        'PORT'    : os.environ["PGPORT"],
+        'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
+        'NAME'     : os.environ["PGDATABASE"],
+        'USER'     : os.environ["PGUSER"],
+        'PASSWORD' : os.environ["PGPASSWORD"],
+        'HOST'     : os.environ["PGHOST"],
+        'PORT'     : os.environ["PGPORT"],
     }
 }
 
@@ -163,7 +163,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # PRODUCTION SETTINGS
 
-# # SECURE_HSTS_SECONDS = 600
+# SECURE_HSTS_SECONDS = 600
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True

@@ -12,9 +12,6 @@ class Categories(models.Model):
     
     def __str__(self):
         return f"{self.pk} - {self.categoryname}"
-    
-    def __repr__(self):
-        return f"{self.categoryname}"
 
 
 
@@ -32,4 +29,4 @@ class Article(models.Model):
     )
     
     def __str__(self):
-        return f"{self.title} ({self.category}) - {self.content[:100]}"
+        return f"{self.title} ({str(self.category).split(' - ')[-1]}) - {self.content[:100]}"

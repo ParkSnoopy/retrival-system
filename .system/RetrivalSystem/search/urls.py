@@ -11,6 +11,6 @@ from .views import (
 )
 
 urlpatterns = [
-    path('', home, name='search-home'), 
+    path('<str:searchinput>', home, name='search-home'), 
     
 ]

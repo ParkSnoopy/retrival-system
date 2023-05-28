@@ -1,14 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>
-		Search - Home
-	</title>
-</head>
-<body>
-	<h1>Search - Home</h1>
-	<a href="/">Homepage - Home</a>
-</body>
-</html>
+{% extends 'common/layout.html' %}
+
+{% block title %}
+<title>
+  Search - {{ searchinput }}
+</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <a href="/" class="btn" style="margin-top:5vh; scale:150%; color:#DDDDDD;"> ⮜ back </a>
+  <p style="color:#FFFFFF; margin-top:5vh;">
+  	<span lang="zh" class="h1">{{ searchinput }}</span>
+  	<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+  	<span lang="zh" class="h3">的检索结果</span>
+  </p>
+
+  <hr style="height:2px; border-width:0; background-color:#AAAAAA;">
+
+  {% for result in results %}
+
+  <div lang="zh" style="padding-top:20px; padding-bottom:20px ; background-color:#888888; border-radius:10px;">
+      <div class="row" style="height:10%;"></div>
+      <div class="row" style="height:80%;">
+        <div class="col-md-10 col-md-offset-1">
+        <div class="card" style="width:80%;">
+          <div class="card-body">
+            <h4 class="card-title"><strong>{{result.title}}</strong></h4>
+            <h6 class="card-subtitle mb-2">{{result.category}}</h6>
+            <br style="">
+            {% for line in result.content %}
+            <p class="card-text">{{line}}</p>
+            {% endfor %}
+            <a href="#" class="card-link" style="color:#FFFF00; scale:80%;">仔细阅读</a>
+          </div>
+        </div>
+        </div>
+      </div>
+  </div>
+
+  <hr style="height:1px; border-width:0; background-color:#555555;">
+
+  {% endfor %}
+
+</div>
+{% endblock %}
