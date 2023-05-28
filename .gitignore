@@ -1,7 +1,12 @@
 
+# basic excludes
 *.pyc
 *.env
+.system/pyvenv.cfg
+
+# ignore crawler cache
 .system/crawler/out/*.txt
 
 # requirements
 .system/Lib/site-packages/*
+
