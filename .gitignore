@@ -4,15 +4,7 @@
 *.env
 *.sqlite3
 
-.system/pyvenv.cfg
-.system/RetrivalSystem/pathadder.py
-.system/RetrivalSystem/static/*
+RetrivalSystem/pathadder.py
+RetrivalSystem/static/*
 
-# ignore crawler cache
-.system/crawler/out/*.txt
-.system/crawler/out/endpoint/*
-
-# requirements
-.system/Lib/site-packages/*
-.system/Scripts/*
 
