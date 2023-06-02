@@ -8,15 +8,19 @@
 
 ---
 
+## 发改委检索系统 on Railway
+* Deploy tested on [Railway](http://engine.sunwoo.top/).
+
+---
+
 ## UPDATES
 > 05.27
 * added prototype crawler ( need further finetune )
 > 05.28
 * added prototype django server
 * crawler tuning for '[ndrc.gov.cn](https://www.ndrc.gov.cn/)' - result as [output.zip](.system/crawler/out/endpoint.zip).
+> 05.29
+* django server outline complete
 
 ---
 
-## 发改委检索系统 on Railway
-> 05.28
-* Deploy tested on [Railway](http://engine.sunwoo.top/).
