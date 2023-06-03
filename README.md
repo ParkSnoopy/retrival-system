@@ -8,8 +8,8 @@
 
 ---
 
-## 发改委检索系统 on Railway
-* Deploy tested on [Railway](http://engine.sunwoo.top/).
+## 医疗保险政府文献 检索系统 on Railway
+* Deploy tested on [entry 01](http://engine.sunwoo.top/) or [entry 02](http://engine.snoo.top/).
 
 ---
 
@@ -21,6 +21,8 @@
 * crawler tuning for '[ndrc.gov.cn](https://www.ndrc.gov.cn/)' - result as [output.zip](.system/crawler/out/endpoint.zip).
 > 05.29
 * django server outline complete
+> 06.02
+* removed crawler and its dependency
 
 ---
 

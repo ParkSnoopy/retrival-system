@@ -30,6 +30,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     "engine.sunwoo.top", 
+    "engine.snoo.top", 
 ]
 
 
@@ -169,8 +170,15 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = [
+    
+    # sunwoo.top
     "http://engine.sunwoo.top", 
     "https://engine.sunwoo.top", 
+    
+    # snoo.top
+    "http://engine.snoo.top", 
+    "https://engine.snoo.top", 
+    
 ]
 
 

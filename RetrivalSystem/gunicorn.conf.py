@@ -14,4 +14,9 @@ errorlog = "/var/log/gunicorn.error.log"
 capture_output = True
 
 # How verbose the Gunicorn error logs should be 
-loglevel = "info"
+loglevel = "debug"
+
+
+
+# Connection timeout limit ( max 300 )
+timeout = 60
