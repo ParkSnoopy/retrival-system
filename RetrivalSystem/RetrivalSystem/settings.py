@@ -28,10 +28,10 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-CUSTOM_DOMAINS = os.environ["DOMAINS"].split("|||")
+USER_DOMAINS = os.environ["USER_DOMAINS"].split("||||")
 
 ALLOWED_HOSTS = [
-    *CUSTOM_DOMAINS
+    *USER_DOMAINS
 ]
 
 
@@ -173,7 +173,7 @@ SESSION_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = [
     protocol + domain
     for protocol in ("http://", "https://", )
-    for domain in CUSTOM_DOMAINS
+    for domain in USER_DOMAINS
 ]
 
 
