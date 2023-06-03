@@ -1,0 +1,10 @@
+
+# basic excludes
+*.pyc
+*.env
+*.sqlite3
+
+RetrivalSystem/pathadder.py
+RetrivalSystem/static/*
+
+
