@@ -4,29 +4,38 @@ from django.db import models
 
 
 
-class Categories(models.Model):
+class Organization(models.Model):
     
-    categoryname = models.CharField(
-        blank=False, null=False, max_length=1024, 
-    )
+    name = models.CharField(blank=False, null=False, max_length=1024)
     
     def __str__(self):
-        return f"{self.pk} - {self.categoryname}"
+        return f"{self.pk} - {self.name}"
 
+
+class Category(models.Model):
+    
+    name = models.CharField(blank=False, null=False, max_length=1024)
+    
+    def __str__(self):
+        return f"{self.pk} - {self.name}"
 
 
 class Article(models.Model):
     
-    category = models.ForeignKey(
-        Categories, 
-        on_delete=models.CASCADE, 
-    )
-    title = models.CharField(
-        blank=False, null=False, max_length=1024, 
-    )
-    content = models.TextField(
-        blank=False, null=False, 
-    )
+    url = models.CharField(blank=True, null=False, max_length=1024)
+    title = models.CharField(blank=False, null=False, max_length=1024)
+    date = models.DateField(blank=True, null=True)
+    source = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    content = models.TextField(blank=False, null=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
+    
     
     def __str__(self):
-        return f"{self.title} ({str(self.category).split(' - ')[-1]}) - {self.content[:100]}"
+        return (
+            "  << Article >>" + "\t"
+            f"URL - {self.url}" + "\t"
+            f"TITLE - {self.title}" + "\t"
+            f"DATE - {self.date}" + "\t"
+            f"FROM - {self.source}" + "\t"
+            f"CATEGORY - {self.category}"
+        )
