@@ -9,9 +9,7 @@
 #   - python 3.X
 # notes: python 2.X WILL fail or produce misleading results
 
-import sys, os, argparse
-import string, re
-import csv
+import sys, string, re
 
 # ================================================================================ #
 #                                    basic constant
