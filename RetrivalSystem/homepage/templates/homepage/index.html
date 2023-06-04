@@ -1,10 +1,52 @@
 {% extends 'common/layout.html' %}
 
+
+
 {% block title %}
 <title>
   Homepage
 </title>
 {% endblock %}
+
+
+
+{% block javascript %}
+<script type="text/javascript" src="/static/common/js/bootstrap.min.js"></script>
+<script type="text/javascript" >
+	function showModal() {
+	let modal = document.getElementById('db-create-status-modal')
+	let button = document.getElementById('db-create-status-modal-btn')
+
+	if ( "{{db_create_status}}" === "0" ) {
+		modal.innerHTML = `
+		<div class="modal-dialog" role="document">
+		  <h5 class="alert alert-success" id="DBCreateStatusModalLabel">Success</h5>
+		</div>
+		`
+		button.click()
+	} else if ( "{{db_create_status}}" === "1" ) {
+		modal.innerHTML = `
+		<div class="modal-dialog" role="document">
+	    <h5 class="alert alert-danger" id="DBCreateStatusModalLabel">Failure</h5>
+		</div>
+		`
+		button.click()
+	}
+}
+</script>
+{% endblock %}
+
+
+
+{% block separated %}
+<!-- Modal -->
+<button id="db-create-status-modal-btn" type="button" data-toggle="modal" data-target="#db-create-status-modal" style="display:none;"></button>
+<div class="modal fade" id="db-create-status-modal" tabindex="-1" role="dialog" aria-labelledby="DBCreateStatusModalLabel" aria-hidden="false">
+</div>
+<script type="text/javascript">showModal()</script>
+{% endblock %}
+
+
 
 {% block content %}
 <div class="container" style="height: 100vh; background-color:#696969;">
@@ -14,16 +56,25 @@
 	{% if user.is_superuser or user.is_staff %}
 	<div class="row" style="height: 10vh;">
 	  <div class="col-md-8 col-md-offset-2">
+
 	  	<a class="btn" href="/admin/">
 	  		<h3 style="color:#AAAAAA;">
 	  			Admin
 	  		</h3>
 	  	</a>
+
+	  	<a class="btn" href="/database/create/">
+	  		<h3 style="color:#AAAAAA;">
+	  			CreateDB
+	  		</h3>
+	  	</a>
+
 	  	<a class="btn" href="/logout/">
 	  		<h4 style="color:#AAAAAA; padding-top:2vh;">
 	  			Logout
 	  		</h4>
 	  	</a>
+
 	  </div>
 	</div>
 	{% else %}
@@ -44,16 +95,16 @@
 
 	<div class="row">
 	  <div class="col-md-8 col-md-offset-2">
-			<h1 lang="zh" style="color: #2F2F2F;">检索</h1>
+			<h1 style="color: #2F2F2F;">检索</h1>
 			<form method="POST">
 				{% csrf_token %}
 		  	<div class="form-group has-success">
 		  		<br>
-				  <input lang="zh" type="text" class="form-control" name="searchinput" style="scale:150%; width:70%; margin-left:15%; background-color:#DDDDDD;">
+				  <input type="text" class="form-control" name="searchinput" style="scale:150%; width:70%; margin-left:15%; background-color:#DDDDDD;">
 				</div>
 			</form>
 			{% if status == 1 %}
-			<p lang="zh" style="color:#FF7777;">请输入检索词</p>
+			<p style="color:#FF7777;">请输入检索词</p>
 			{% endif %}
 	  </div>
 	</div>

@@ -8,14 +8,26 @@ from django.conf import settings
 
 
 def home(request):
+    
     status = 0
     if request.method == "POST":
-        print(f"\n  {request.POST = }\n")
+        # print(f"\n  {request.POST = }\n")
         searchinput = request.POST.get('searchinput')
         if searchinput:
             return redirect('search-home', searchinput=searchinput)
         status = 1
-    return render(request, 'homepage/index.html', {'status': status})
+    
+    db_create_status = request.COOKIES.get('db_create', None)
+    response = render(request, 'homepage/index.html', {
+        'status': status, 
+        'db_create_status': db_create_status, 
+    })
+    
+    if db_create_status:
+        response.delete_cookie('db_create')
+    
+    return response
+
 
 
 def login_view(request):

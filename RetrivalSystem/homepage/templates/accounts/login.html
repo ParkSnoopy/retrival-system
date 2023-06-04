@@ -18,26 +18,26 @@
         <a href="/" class="btn" style="color:#FFFFFF; padding-left:0;"> ⮜ back </a>
 
         <div style="text-align:center;">
-          <h1 style="color:#DDDDDD;">Login</h1>
+          <h1 style="color:#DDDDDD;">登录 / 注册</h1>
 
           <form method="POST">
             {% csrf_token %}
 
             {% if status == 1 %}
-            <p style="color:#FF7777;">login failed!</p>
+            <p style="color:#FF7777;">登陆失败！</p>
             <div class="row">
             {% else %}
             <div class="row" style="margin-top:10%;">
             {% endif %}
               <div class="form-group">
-                <label class="control-label" style="color:#DDDDDD;">ID</label>
+                <label class="control-label" style="color:#DDDDDD;">账户</label>
                 <input class="form-control" type="text" name="id" style="color:#FFFFFF; background-color:#696969; box-shadow:none;">
               </div>
             </div>
 
             <div class="row">
               <div class="form-group">
-                <label class="control-label" style="color:#DDDDDD;">PASSWORD</label>
+                <label class="control-label" style="color:#DDDDDD;">密码</label>
                 <input class="form-control" type="password" name="pw" style="color:#FFFFFF; background-color:#696969; box-shadow:none;">
               </div>
             </div>
@@ -45,7 +45,7 @@
             <div class="row" style="height:4vh;"></div>
             <div class="row">
               <button class="btn" type="submit">
-                Login
+                登录
               </button>
             </div>
 
