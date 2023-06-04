@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'RetrivalSystem.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-'''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -114,7 +114,7 @@ DATABASES = {
         'PORT'     : os.environ["PGPORT"],
     }
 }
-
+'''
 
 
 # Password validation
@@ -179,8 +179,8 @@ CSRF_TRUSTED_ORIGINS = [
     for domain in USER_DOMAINS
 ]
 
-
-
+STRFTIME_FORMAT = '%Y-%m-%d'
+ZH_STRFTIME_FMT = '%Y-%m-%d'
 
 
 

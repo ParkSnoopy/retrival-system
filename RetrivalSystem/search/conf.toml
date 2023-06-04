@@ -1,0 +1,24 @@
+
+
+[normalized]
+[normalized.match]
+title = 5
+content = 2
+source = 6
+[normalized.mismatch]
+title = -2
+content = -1
+source = 0
+
+
+[raw]
+[raw.match]
+title = 2
+content = 1
+source = 2
+date = 9
+[raw.mismatch]
+title = -5
+content = -10
+source = 0
+date = 0

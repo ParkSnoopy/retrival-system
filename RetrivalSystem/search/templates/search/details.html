@@ -1,0 +1,58 @@
+{% extends 'common/layout.html' %}
+
+
+
+{% block title %}
+<title>
+  {{title}}
+</title>
+{% endblock %}
+
+
+
+{% block javascript %}
+{% endblock %}
+
+
+
+{% block separated %}
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+  <a href="/" class="btn" style="margin-top:5vh; scale:150%; color:#DDDDDD; font-size:90%;"> ❮❮ Home </a>
+  <hr style="height:2px; border-width:0; background-color:#AAAAAA;">
+  <div class="row" style="height:10%;"></div>
+  {% if exist %}
+
+  <h3 style="color:#BBBBBB">
+    <span style="color:#888888; ">机构：</span>
+    <span>{{source}}</span>
+  </h3>
+  <h3 style="color:#BBBBBB">
+    <span style="color:#888888; ">日期：</span>
+    <span>{{date}}</span>
+  </h3>
+  <h1 style="color:#BBBBBB">{{title}}</h1>
+  <br>
+  <a class="h3 text-warning" href="{{url}}" target="_blank" style="color:#DDDD00">点击前往原文</a>
+  <br>
+  <br>
+  <br>
+
+  {% for content in contents %}
+  <p class="h4" style="color:#FFFFFF; line-height:1.5; padding-top:16px; ">{{content}}</p>
+  {% endfor %}
+  <div style="height:80vh"></div>
+
+  {% else %}
+  <div style="padding-top:20px; padding-bottom:20px ; border-radius:10px;">
+    <div class="row" style="height:10%;">
+      <h1 style="text-align:center; color:#FFFFFF;">该对象不存在</h1>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

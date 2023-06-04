@@ -1,11 +1,6 @@
 # 信息存储与检索
 中国吉林政府 医疗保险文献 检索系统
 
-* 系统整体结构（6/2）
-- 整体结构（数据库、python检索系统、前端）
-- 爬虫（政策文档）（5/29）
-- 核心算法（检索、列举）
-
 ---
 
 ## 医疗保险政府文献 检索系统 on Railway
@@ -23,6 +18,10 @@
 * django server outline complete
 > 06.02
 * removed crawler and its dependency
+> 06.04
+* DB loader created
+* applied basic search algorithm
+* upgraded search result page
+* added result details page
 
 ---
-

@@ -1,46 +1,72 @@
 {% extends 'common/layout.html' %}
 
+
+
 {% block title %}
 <title>
   Search - {{ searchinput }}
 </title>
 {% endblock %}
 
+
+
+{% block javascript %}
+{% endblock %}
+
+
+
+{% block separated %}
+<form method="POST" style="position:fixed; top:16px; left:40%; width:20%; ">
+  {% csrf_token %}
+  <br>
+  <input placeholder="检索" type="text" class="form-control" name="searchinput" style="scale:150%; text-align:center; width:100%; background-color:#222222; color:#DDDDDD;">
+</form>
+{% endblock %}
+
+
+
 {% block content %}
 <div class="container">
-  <a href="/" class="btn" style="margin-top:5vh; scale:150%; color:#DDDDDD;"> ⮜ back </a>
+  <a href="/" class="btn" style="margin-top:5vh; scale:150%; color:#DDDDDD; font-size:90% ;"> ❮❮ Back </a>
   <p style="color:#FFFFFF; margin-top:5vh;">
-  	<span lang="zh" class="h1">{{ searchinput }}</span>
+  	<span class="h1">{{ searchinput }}</span>
   	<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-  	<span lang="zh" class="h3">的检索结果</span>
+  	<span class="h3">的检索结果</span>
+    <span class="h4">（ 共 {{counts}} 条 ）</span>
   </p>
 
   <hr style="height:2px; border-width:0; background-color:#AAAAAA;">
 
+  {% if counts > 0 %}
   {% for result in results %}
 
-  <div lang="zh" style="padding-top:20px; padding-bottom:20px ; background-color:#888888; border-radius:10px;">
-      <div class="row" style="height:10%;"></div>
+  <div style="padding-top:20px; padding-bottom:20px ; background-color:#888888; border-radius:10px;">
+    <div class="row" style="height:10%;"></div>
       <div class="row" style="height:80%;">
         <div class="col-md-10 col-md-offset-1">
-        <div class="card" style="width:80%;">
-          <div class="card-body">
-            <h4 class="card-title"><strong>{{result.title}}</strong></h4>
-            <h6 class="card-subtitle mb-2">{{result.category}}</h6>
-            <br style="">
-            {% for line in result.content %}
-            <p class="card-text">{{line}}</p>
-            {% endfor %}
-            <a href="#" class="card-link" style="color:#FFFF00; scale:80%;">仔细阅读</a>
+          <div class="card" style="width:85%; padding-left:10%;">
+            <div class="card-body">
+              <p class="h4 card-title" style="font-size:22px;"><strong>{{result.title}}</strong></p>
+              <p class="h6 card-subtitle mb-2" style="font-size:14px;">{{result.date}} // score {{result.score}}</p>
+              <br style="">
+              <p class="card-text" style="font-size:16px;">{{ result.content | safe }}</p>
+              <a href="/search/details/{{result.pk}}" target="_blank" class="card-link" style="color:#FFFF00; font-size:16px;">（ 了解更多 ）</a>
+            </div>
           </div>
         </div>
-        </div>
       </div>
-  </div>
+    </div>
 
-  <hr style="height:1px; border-width:0; background-color:#555555;">
+    <hr style="height:1px; border-width:0; background-color:#555555;">
 
-  {% endfor %}
+    {% endfor %}
+    {% else %}
+    <div style="padding-top:20px; padding-bottom:20px ; border-radius:10px;">
+      <div class="row" style="height:10%;">
+        <h1 style="text-align:center; color:#FFFFFF;">无检索结果</h1>
+      </div>
+    </div>
+    {% endif %}
 
 </div>
 {% endblock %}

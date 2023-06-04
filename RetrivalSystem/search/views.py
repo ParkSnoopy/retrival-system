@@ -1,41 +1,39 @@
 from django.shortcuts import render
+from django.conf import settings
 
-from database.models import Categories, Article
-
-from collections import namedtuple
-article = namedtuple("article", ("pk", "category", "title", "content"))
+from .filterer import retrieve, process_article_content
+from database.models import Article, Organization
 
 # Create your views here.
 
 
 def home(request, searchinput:str):
     
-    results = retrieve(searchinput)
+    if request.method == "POST":
+        searchinput = request.POST['searchinput']
     
-    return render(request, 'search/index.html', 
-        {
-            'searchinput': searchinput, 
-            'results': results, 
-        }
-    )
+    results, counts = retrieve(searchinput)
+    
+    return render(request, 'search/index.html', {
+        'searchinput': searchinput, 
+        'results': results, 
+        'counts': counts, 
+    })
 
 
-
-def retrieve(searchinput):
-    
-    # some algorithm here
-    
-    filtered = Article.objects.all().values()
-    results = []
-    
-    for each in filtered:
-        results.append(
-            article(
-                each['id'], 
-                Categories.objects.get( pk = each['category_id'] ).categoryname, 
-                each['title'], 
-                each['content'].split('\r\n')
-            )
-        )
-    
-    return results
+def details(request, article_pk:int):
+    try:
+        article = Article.objects.get( pk = article_pk )
+        return render(request, 'search/details.html', {
+            'exist': True, 
+            'url': article.url, 
+            'title': article.title, 
+            'contents': process_article_content(article.content), 
+            'source': article.source.name, 
+            'date': article.date.strftime(settings.ZH_STRFTIME_FMT), 
+        })
+    except Article.DoesNotExist:
+        return render(request, 'search/details.html', {
+            'exist': False, 
+            'article': None, 
+        })
