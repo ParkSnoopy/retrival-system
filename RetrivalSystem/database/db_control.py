@@ -35,10 +35,9 @@ def read_and_create_from(filename):
         Organization.objects.all().delete()
         
         # CSV EFFECTIVE DATA FORMAT
-        URL, title, date, source, article, *_ = next(reader)
-        
+        _, URL, title, date, source, article, *_ = next(reader)
         for row in reader:
-            URL, title, date, source, article, *_ = row
+            _, URL, title, date, source, article, *_ = row
             # article = process_article_content( article )
             
             organization, _ = Organization.objects.get_or_create( name = source )

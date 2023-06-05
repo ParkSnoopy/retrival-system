@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文献查询</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+ 
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    header {
+        text-align: center;
+    }
+</style>
+<body>
+    <div class="container">
+        <header class="jumbotron", color = red >
+            <h1>文件检索系统欢迎您!</h1>
+            <p>在这里您可以进行一些操作，用来查询文献</p>
+        </header>
+        <main>
+            <!-- 文献查询 -->
+            <section>
+                <h1>文献查询</h1>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group" style="display:flex;">
+                            <select class="form-select" aria-label="Default select example" style="width:20%;text-align:center;">
+                                <option selected>（ 目标字段 ）</option>
+                                <option value="文号">文号</option>
+                                <option value="发文机构">发文机构</option>
+                                <option value="主题分类">主题分类</option>
+                                <option value="日期">日期</option>
+                                <option value="相关政策文件">相关政策文件</option>
+                                <option value="搜索命中">搜索命中</option>
+                            </select>
+                            <input type="text" class="form-control" aria-label="..." style="width:160px;" id="query_text"
+                                placeholder="请输入" value="">
+                            <button type="button" class="btn btn-default" id="query_btn">查询</button>
+                        </div><!-- /input-group -->
+                    </div><!-- /.col-lg-6 -->
+            </section>
+            <!-- 查询结果 -->
+            <aside>
+                <h1>查询结果</h1>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>文号</th>
+                            <th>发文机构</th>
+                            <th>主题分类</th>
+                            <th>日期</th>
+                            <th>相关政策文献</th>
+                            <th>搜索命中</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paper_result">
+     
+                    </tbody>
+                </table>
+            </aside>
+            <!-- 文献列表 -->
+            <footer>
+                <h1>文献列表</h1>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>文号</th>
+                            <th>发文机构</th>
+                            <th>主题分类</th>
+                            <th>日期</th>
+                            <th>相关政策文献</th>
+                            <th>搜索命中</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paper_list">
+     
+                    </tbody>
+                </table>
+            </footer>
+        </main>
+    </div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.21/lodash.js"></script>
+    <script>
+<!--let papers = [{URL: 'http://xxgk.jl.gov.cn/zsjg/fgw/xxgkmlqy/202304/t20230411_8691743.html', title: '关于印发医保支持中医药传承创新发展若干政策措施的通知', date: '2023-04-11', source: '省政府信息公开专栏', article: '各市（州）医疗保障局、卫生健康委、中医药管理局，长白山管委会医疗保障局、卫生健康局、中医药管理局，梅河 ', 索引号: "nan", 发文机关: "nan",  标题: 'nan', 发文字号: 'nan', 分类: 'nan', 成文日期: 'nan', 发布日期: 'nan'}];-->
+    let papers = [{文号: 12312, 发文机构:'民政部', 主题分类:'劳动人事监察', 日期:2020-09-01, 相关政策文件:1, 搜索命中:1,}]
+        // 文献列表渲染
+        paper_list.innerHTML += _.template(
+            '<% _.forEach(papers, function(item) { %><tr><td><%- item.文号 %></td><td><%- item.发文机构 %></td><td><%- item.主题分类 %></td><td><%- item.日期 %></td><td><%- item.相关政策文件 %></td><td><%- item.搜索命中 %></td></tr><% }); %>'
+        )();
+ 
+        // 查询
+        $("#query_btn").click(function () {
+            paper_result.innerHTML = '';
+            let result = papers.filter(function (item) { return item.发文机构 == query_text.value | item.文号 == query_text.value});
+ 
+            if (result.length >= 1) {
+                _(result).forEach(function (value) {
+                    paper_result.innerHTML += `<tr><td>${value.文号}</td>
+                                                    <td>${value.发文机构}</td>
+                                                    <td>${value.主题分类}</td>
+                                                    <td>${value.日期}</td>
+                                                    <td>${value.相关政策文件}</td>
+                                                    <td>${value.搜索命中}</td>
+                                              </tr>`
+                });    
+            }
+            if(result.length < 1)(
+                alert("没有找到文献")
+            )
+ 
+            query_text.value = '';
+        });
+ 
+    </script>
+</body>
+</html>

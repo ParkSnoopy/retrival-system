@@ -7,45 +7,24 @@ from database.models import Article, Organization
 from .zh_normalizer.main import zh_normalize, zh_jieba_cut
 from .local_option import LOCAL_OPTION
 
-from collections import namedtuple; ArticleTuple = namedtuple("ArticleTuple", ("pk", "date", "title", "content", "score"))
+from collections import namedtuple
 
 
 
-def filter_objects_by_searchinput( select_best: int, searchinput: str, objects: list[dict] ) -> [list[dict] , int]:
-    """
-    Method for filter Article objects dictionary by user searchinput
 
-    Parameters
-    ----------
-    select_best : int
-        max number of instanse to return. None for return all.
-    searchinput : str
-        user search input.
-    objects : list[dict]
-        Article.objects.all().values(), which is <QuerySet list[dict]>.
 
-    Returns
-    -------
-    ( list[dict] , int, Optional[tuple] )
-        0 : filtered subset of objects.
-        1 : length of all non-zero scored results.
-        2 : if exists, anything customized.
-
-    """
+ScoredObject = namedtuple("ScoredObject", ("obj", "score", ))
+def filter_raw_objects(select_best, searchinput, objects, _return_minus=False) -> list[ScoredObject]:
     
     n_searchinput = zh_normalize( searchinput )
     n_searchinput = set( zh_jieba_cut( n_searchinput ) )
-    # r_searchinput = set( zh_jieba_cut( searchinput ) )
-    # searchinput = filter( lambda word: word not in stopwords, searchinput )
     
-    initlen = len( objects )
-    # reversed for index consistensy even after 'objects.pop()'
-    for i, obj in enumerate( objects[::-1] ):
-        i = initlen - i - 1
+    results = []
+    for i, obj in enumerate( objects ):
         title, content, source = (
-            obj['title'], 
-            obj['content'], 
-            str(Organization.objects.get( id = obj['source_id'] ).name), 
+            str(obj.title), 
+            str(obj.content), 
+            str(obj.source.name), 
         )
         
         title = zh_normalize( title )
@@ -74,53 +53,136 @@ def filter_objects_by_searchinput( select_best: int, searchinput: str, objects: 
                 if count > 0 else
                 LOCAL_OPTION['normalized']['mismatch']['source']
             )
-        # for word in r_searchinput:
-        #     score += title.count( word )   * LOCAL_OPTION['raw']['title_match_score']
-        #     score += content.count( word ) * LOCAL_OPTION['raw']['content_match_score']
-        #     score += source.count( word )  * LOCAL_OPTION['raw']['source_match_score']
-        #     score += date.count( word )    * LOCAL_OPTION['raw']['date_match_score']
         
-        if score > 0:
-            objects[i]['score'] = score
-        else:
-            # print(f"{score=}, pop {i} from length {len(objects)}")
-            objects.pop(i)
-    
-    objects.sort(key=lambda x: x['score'], reverse=True)
-    
-    return objects[:select_best], len(objects), set((searchinput, *zh_jieba_cut( searchinput ), *n_searchinput, ))
-
-
-def retrieve(searchinput):
-    
-    objects = list( Article.objects.all().values() )
-    filtered, counts, targetwords = filter_objects_by_searchinput(None, searchinput, objects)
-    
-    results = []
-    for article in filtered:
-        
-        content = article['content']
-        if len( content ) > 100:
-            content = content[:100]
-            content += " ..."
-        
-        for word in targetwords:
-            word = word.strip()
-            if word:
-                content = content.replace(word, f"<strong>{word}</strong>")
-        
-        results.append(
-            ArticleTuple(
-                article['id'], 
-                article['date'].strftime(settings.STRFTIME_FORMAT), 
-                article['title'], 
-                content, 
-                article['score'], 
+        if score > 0 or _return_minus:
+            results.append(
+                ScoredObject(obj, score, )
             )
-        )
+    
+    results.sort(key=lambda x: x.score, reverse=True)
+    
+    return results[:select_best], len(results), set((searchinput, *zh_jieba_cut( searchinput ), *n_searchinput, ))
+
+
+
+def retrieve(searchinput, _yly=False):
+    
+    filtered, counts, targetwords = filter_raw_objects(
+        None, 
+        searchinput, 
+        Article.objects.all(), 
+        # _return_minus=_yly, 
+    )
+    
+    results = [ 
+        
+        _article_parse(article, targetwords)
+        for article in filtered
+        
+    ] if not _yly else [
+        
+        _yly_article_parse(article, targetwords)
+        for article in filtered
+        
+    ]
     
     return results, counts
 
 
+
 def process_article_content(content:str) -> list[str]:
     return content.replace("。", "。\r\n").replace("1.", "\r\n1.").split('\r\n')
+
+
+
+ArticleTuple = namedtuple("ArticleTuple", ("pk", "date", "title", "content", "score", "source"))
+def _article_parse(scoredobject: ScoredObject, targetwords=None):
+    
+    # CONTENT
+    if len( scoredobject.obj.content ) > 100:
+        content = str(scoredobject.obj.content)[:100] + " ..."
+    else:
+        content = str(scoredobject.obj.content)
+    
+    for word in targetwords:
+        word = word.strip()
+        if word:
+            content = content.replace(word, f"<strong>{word}</strong>")
+    
+    return ArticleTuple(
+        scoredobject.obj.pk, 
+        scoredobject.obj.date.strftime(settings.STRFTIME_FORMAT), 
+        str(scoredobject.obj.title), 
+        content, 
+        scoredobject.score, 
+        str(scoredobject.obj.source.name), 
+    )
+
+
+
+YlyArticleTuple = namedtuple("YlyArticleTuple", ("url", "score", "title", "source", "date", "content"))
+def _yly_article_parse(scoredobject: ScoredObject, targetwords=None):
+    
+    # TITLE
+    if len( scoredobject.obj.title ) > 20:
+        title = str(scoredobject.obj.title)[:20] + " ..."
+    else:
+        title = str(scoredobject.obj.title)
+    
+    # CONTENT
+    if len( scoredobject.obj.content ) > 60:
+        content = str(scoredobject.obj.content)[:60] + " ..."
+    else:
+        content = str(scoredobject.obj.content)
+    
+    # STRONGIFY SEARCH WORDS
+    for word in targetwords:
+        word = word.strip()
+        if word:
+            content = content.replace(word, f"<strong>{word}</strong>")
+    
+    return YlyArticleTuple(
+        str(scoredobject.obj.url), 
+        scoredobject.score, 
+        title, 
+        str(scoredobject.obj.source.name), 
+        str(scoredobject.obj.date.strftime(settings.STRFTIME_FORMAT)), 
+        content, 
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

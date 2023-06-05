@@ -47,7 +47,7 @@
           <div class="card" style="width:85%; padding-left:10%;">
             <div class="card-body">
               <p class="h4 card-title" style="font-size:22px;"><strong>{{result.title}}</strong></p>
-              <p class="h6 card-subtitle mb-2" style="font-size:14px;">{{result.date}} // score {{result.score}}</p>
+              <p class="h6 card-subtitle mb-2" style="font-size:14px;">{{result.date}} // {{result.source}} // score {{result.score}}</p>
               <br style="">
               <p class="card-text" style="font-size:16px;">{{ result.content | safe }}</p>
               <a href="/search/details/{{result.pk}}" target="_blank" class="card-link" style="color:#FFFF00; font-size:16px;">（ 了解更多 ）</a>

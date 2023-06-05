@@ -2,13 +2,13 @@ from django.shortcuts import render
 from django.conf import settings
 
 from .filterer import retrieve, process_article_content
-from database.models import Article, Organization
+from database.models import Article
 
 # Create your views here.
 
 
+
 def home(request, searchinput:str):
-    
     if request.method == "POST":
         searchinput = request.POST['searchinput']
     
@@ -37,3 +37,70 @@ def details(request, article_pk:int):
             'exist': False, 
             'article': None, 
         })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
