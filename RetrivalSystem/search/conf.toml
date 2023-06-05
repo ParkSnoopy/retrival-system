@@ -2,13 +2,13 @@
 
 [normalized]
 [normalized.match]
-title = 5
-content = 2
-source = 6
+title = 20
+content = 1
+source = 40
 [normalized.mismatch]
-title = -2
-content = -1
-source = 0
+title = -20
+content = -20
+source = -10
 
 
 [raw]
