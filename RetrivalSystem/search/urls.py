@@ -15,7 +15,7 @@ from .view_tmp import (
 )
 
 urlpatterns = [
-    path('<str:searchinput>', home, name='search-home'), 
+    path('', home, name='search-home'), 
     path('details/<int:article_pk>', details), 
     
     path('yly/', home_yly), 

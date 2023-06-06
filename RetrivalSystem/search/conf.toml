@@ -1,24 +1,20 @@
 
 
 [normalized]
+
 [normalized.match]
+
 title = 20
 content = 1
 source = 40
+
 [normalized.mismatch]
-title = -20
-content = -30
-source = -10
 
-
-[raw]
-[raw.match]
-title = 2
-content = 1
-source = 2
-date = 9
-[raw.mismatch]
-title = -5
-content = -10
+title = 0
+content = 0
 source = 0
-date = 0
+
+
+[cluster]
+
+distance = 0.25

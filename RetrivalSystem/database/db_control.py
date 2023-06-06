@@ -8,7 +8,7 @@ Created on Sun Jun  4 16:16:29 2023
 from django.conf import settings
 
 from .local_option import LOCAL_OPTION
-from .models import Article, Category, Organization
+from .models import Article, Category, Organization, Region
 
 import csv
 
@@ -31,25 +31,36 @@ def read_and_create_from(filename):
         
         # if read successfully, flush DB
         Article.objects.all().delete()
-        Category.objects.all().delete()
         Organization.objects.all().delete()
+        Category.objects.all().delete()
+        Region.objects.all().delete()
+        
+        # default values
+        o = Organization.objects.create( name = "" )
+        c = Category.objects.create( name = "其他" )
+        r = Region.objects.create( name = "" )
         
         # CSV EFFECTIVE DATA FORMAT
-        _, URL, title, date, source, article, *_ = next(reader)
+        *_, url, title, date, source, article, indexno, docno, category, region = next(reader)
         for row in reader:
-            _, URL, title, date, source, article, *_ = row
+            # print(f"\n  {row = }\n")
+            _, url, title, date, source, article, indexno, docno, category, region = row
             # article = process_article_content( article )
             
-            organization, _ = Organization.objects.get_or_create( name = source )
-            category, _ = Category.objects.get_or_create( name = url_to_category(URL) )
+            organization, _ = Organization.objects.get_or_create( name = source ) if source else ( o, False )
+            category, _ = Category.objects.get_or_create( name = category ) if category else ( c, False )
+            region, _ = Region.objects.get_or_create( name = region ) if region else ( r, False )
             
             article = Article.objects.create(
-                url=URL, 
-                title=title, 
-                date=date, 
-                source=organization, 
-                content=article, 
-                category=category, 
+                url = url, 
+                title = title, 
+                date = date, 
+                source = organization, 
+                content = article, 
+                indexno = indexno, 
+                documentno = docno, 
+                category = category, 
+                region = region, 
             )
             
             # print(f"\n  {article.pk} - \n    {article}\n")

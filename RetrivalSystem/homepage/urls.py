@@ -6,6 +6,7 @@ Created on Sun May 28 13:55:48 2023
 """
 
 from django.urls import path
+from django.shortcuts import redirect
 
 from .views import (
     home, 
@@ -17,7 +18,8 @@ from .views import (
 
 
 urlpatterns = [
-    path('', home, name='homepage-home'), 
+    path('', lambda request: redirect('homepage-home', status='0')), 
+    path('<str:status>', home, name='homepage-home'), 
     
     path('login/', login_view, name='login'), 
     path('logout/', logout_view, name='logout'), 

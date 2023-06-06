@@ -12,27 +12,39 @@
 
 {% block javascript %}
 <script type="text/javascript" src="/static/common/js/bootstrap.min.js"></script>
-<script type="text/javascript" >
+<script type="text/javascript" src="/static/homepage/js/main.js"></script>
+<script type="text/javascript">
 	function showModal() {
-	let modal = document.getElementById('db-create-status-modal')
-	let button = document.getElementById('db-create-status-modal-btn')
-
-	if ( "{{db_create_status}}" === "0" ) {
-		modal.innerHTML = `
-		<div class="modal-dialog" role="document">
-		  <h5 class="alert alert-success" id="DBCreateStatusModalLabel">Success</h5>
-		</div>
-		`
-		button.click()
-	} else if ( "{{db_create_status}}" === "1" ) {
-		modal.innerHTML = `
-		<div class="modal-dialog" role="document">
-	    <h5 class="alert alert-danger" id="DBCreateStatusModalLabel">Failure</h5>
-		</div>
-		`
-		button.click()
+		let modal = document.getElementById('db-create-status-modal')
+		let button = document.getElementById('db-create-status-modal-btn')
+		if ( "{{db_create_status}}" === '0' ) {
+			modal.innerHTML = `
+			<div class="modal-dialog" role="document">
+			  <h5 class="alert alert-success" id="DBCreateStatusModalLabel">Success</h5>
+			</div>
+			`
+			button.click()
+		} else if ( "{{db_create_status}}" === '1' ) {
+			modal.innerHTML = `
+			<div class="modal-dialog" role="document">
+		    <h5 class="alert alert-danger" id="DBCreateStatusModalLabel">Failure</h5>
+			</div>
+			`
+			button.click()
+		}
 	}
-}
+</script>
+<script type="text/javascript">
+  document.onkeydown=function(evt){
+    var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+    if (keyCode == 13) {
+    	toggleDoSearch(1)
+    	console.log(document.getElementById('submit-btn'))
+      document.getElementById('submit-btn').click()
+    } else if (keyCode == 27) {
+    	document.getElementById('remove-btn').click()
+    }
+  }
 </script>
 {% endblock %}
 
@@ -49,7 +61,7 @@
 
 
 {% block content %}
-<div class="container" style="height: 100vh; background-color:#696969;">
+<div class="container" style="height: 100vh; background-color:dimgray;">
 
   <div class="row" style="height: 2vh;"></div>
 
@@ -67,6 +79,12 @@
 	  		<h3 style="color:#AAAAAA;">
 	  			CreateDB
 	  		</h3>
+	  	</a>
+
+	  	<a class="btn" href="/search/yly/">
+		  	<h3 style="color:#AAAAAA;">
+	  			.ver0
+	      </h3>
 	  	</a>
 
 	  	<a class="btn" href="/logout/">
@@ -103,19 +121,51 @@
 
 	<div class="row">
 	  <div class="col-md-8 col-md-offset-2">
-			<h1 style="color: #2F2F2F;">检索</h1>
-			<form method="POST">
+			<form method="POST" action="/search/">
 				{% csrf_token %}
-		  	<div class="form-group has-success">
-		  		<br>
-				  <input type="text" class="form-control" name="searchinput" style="scale:150%; width:70%; margin-left:15%; background-color:#DDDDDD;">
+				<div id="searchinput-everything">
+					<label class="h1" style="color:white;">检索</label><br><br>
+					<div class="input-group" style="width:80%; margin-left:10%; scale:125%; background-color:gray;">
+					  <div class="input-group-addon" style="width:15%; background-color:gray; color:white; scale:101%;">
+					  	<select name="andor-00" hidden>
+					  		<option value="AND"></option>
+					  	</select>
+					  </div>
+					  <div class="input-group-addon" style="width:20%; background-color:gray; padding:0;">
+					    <select name="column-00" style="text-align:center; background-color:gray; color:white;">
+	              <option value="全部字段" selected>全部字段</option>
+	              <option value="链接">链接</option>
+	              <option value="主题">主题</option>
+	              <option value="日期">日期</option>
+	              <option value="发文机构">发文机构</option>
+	              <option value="内容">内容</option>
+	              <option value="索引号">索引号</option>
+	              <option value="发文字号">发文字号</option>
+	              <option value="分类">分类</option>
+	              <option value="地区">地区</option>
+	          	</select>
+					  </div>
+					  <input type="text" class="form-control" name="searchinput-00" style="width:100%; background-color:gray; color:white; ">
+					  <div class="input-group-addon btn" style="width:7%; background-color:gray; scale:101%;" onclick="addInputbox()">
+					    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+					    	<path fill="white" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
+					    </svg>
+					  </div>
+					</div><br>
+				</div>
+				{% if status == '1' %}
+				<p style="color:#FF7777;">请输入检索词</p>
+				{% endif %}
+				<input id="do-search" type="text" name="doSearch" value="1" hidden>
+				<br>
+				<div class="row">
+					<div class="btn-group" role="group" aria-label="Basic example" style="width:80%; margin-left:10%; scale:120%">
+					  <button id="remove-btn" type="submit" class="btn btn-lg" style="width:50%; background-color:darkgray;" onclick="toggleDoSearch(0)">清除</button>
+					  <button id="submit-btn" type="submit" class="btn btn-lg" style="width:50%; background-color:darkgray;" onclick="toggleDoSearch(1)">检索</button>
+					</div>
 				</div>
 			</form>
-			{% if status == 1 %}
-			<p style="color:#FF7777;">请输入检索词</p>
-			{% endif %}
 	  </div>
 	</div>
-	
 </div>
 {% endblock %}

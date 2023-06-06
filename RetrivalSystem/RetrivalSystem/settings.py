@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 USER_DOMAINS = [
     os.environ["DOMAIN_A"], 
@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'RetrivalSystem.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -114,7 +114,7 @@ DATABASES = {
         'PORT'     : os.environ["PGPORT"],
     }
 }
-'''
+
 
 
 # Password validation
