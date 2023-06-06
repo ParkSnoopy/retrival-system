@@ -36,11 +36,6 @@ def read_and_create_from(filename):
         Category.objects.all().delete()
         Region.objects.all().delete()
         
-        # default values
-        o = Organization.objects.create( name = "" )
-        c = Category.objects.create( name = "其他" )
-        r = Region.objects.create( name = "吉林" ) # Current empty region data is all 'JiLin'
-        
         # CSV EFFECTIVE DATA FORMAT
         *_, url, title, date, source, article, indexno, docno, category, region = next(reader)
         for row in reader:
@@ -48,9 +43,9 @@ def read_and_create_from(filename):
             _, url, title, date, source, article, indexno, docno, category, region = row
             # article = process_article_content( article )
             
-            organization, _ = Organization.objects.get_or_create( name = source ) if source else ( o, False )
-            category, _ = Category.objects.get_or_create( name = category ) if category else ( c, False )
-            region, _ = Region.objects.get_or_create( name = region ) if region else ( r, False )
+            organization, _ = Organization.objects.get_or_create( name = ( source or "" ) )
+            category, _ = Category.objects.get_or_create( name = ( category or "其他" ) )
+            region, _ = Region.objects.get_or_create( name = ( region or "吉林省" ) )
             
             article = Article.objects.create(
                 url = url, 
