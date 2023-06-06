@@ -1,15 +1,11 @@
 from django.shortcuts import render
-from django.conf import settings
 
-from .filterer import retrieve, process_article_content
-from database.models import Article, Organization
-
-from typing import Final
+from .filterer import retrieve
+from database.db_control import FULLDATAS
 
 # Create your views here.
 
 
-FULLDATAS: Final = Article.objects.all()
 
 def home_yly(request):
     if request.method == "GET":

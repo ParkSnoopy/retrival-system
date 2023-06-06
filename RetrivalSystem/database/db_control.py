@@ -20,8 +20,9 @@ def url_to_category(url):
             return slug
     return slug[0]
 
-
+FULLDATAS = Article.objects.all()
 def read_and_create_from(filename):
+    global FULLDATAS
     
     # CSV FILE PATH
     data_path = settings.BASE_DIR / LOCAL_OPTION["DATA_DIR"] / filename
@@ -64,3 +65,5 @@ def read_and_create_from(filename):
             )
             
             # print(f"\n  {article.pk} - \n    {article}\n")
+    
+    FULLDATAS = Article.objects.all()
