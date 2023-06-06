@@ -39,7 +39,7 @@ def read_and_create_from(filename):
         # default values
         o = Organization.objects.create( name = "" )
         c = Category.objects.create( name = "其他" )
-        r = Region.objects.create( name = "" )
+        r = Region.objects.create( name = "吉林" ) # Current empty region data is all 'JiLin'
         
         # CSV EFFECTIVE DATA FORMAT
         *_, url, title, date, source, article, indexno, docno, category, region = next(reader)
