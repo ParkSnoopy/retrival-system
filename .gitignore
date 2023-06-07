@@ -4,7 +4,10 @@
 *.env
 *.sqlite3
 
-RetrivalSystem/pathadder.py
+# make sure static is always up to date
 RetrivalSystem/static/*
 
+# etc.
 *.xlsx
+*.xmind
+*.mwb

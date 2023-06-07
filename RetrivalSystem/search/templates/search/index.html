@@ -18,8 +18,13 @@
 {% block separated %}
 <form method="POST" style="position:fixed; top:16px; left:40%; width:20%; ">
   {% csrf_token %}
-  <br>
-  <input placeholder="检索" type="text" class="form-control" name="searchinput" style="scale:150%; text-align:center; width:100%; background-color:#222222; color:#DDDDDD;">
+  <select name="andor-00" hidden>
+    <option value="AND"></option>
+  </select>
+  <select name="column-00" hidden>
+    <option value="全部字段"></option>
+  </select>
+  <input placeholder="检索" type="text" class="form-control" name="searchinput-00" style="scale:150%; text-align:center; width:100%; background-color:#222222; color:#DDDDDD;">
 </form>
 {% endblock %}
 
@@ -27,11 +32,11 @@
 
 {% block content %}
 <div class="container">
-  <a href="/" class="btn" style="margin-top:5vh; scale:150%; color:#DDDDDD; font-size:90% ;"> ❮❮ Back </a>
-  <p style="color:#FFFFFF; margin-top:5vh;">
+  <a href="/" class="btn" style="margin-top:5vh; scale:150%; color:whitesmoke; font-size:90% ;"> ❮❮ Back </a>
+  <p style="color:white; margin-top:5vh;">
   	<span class="h1">{{ searchinput }}</span>
-  	<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-  	<span class="h3">的检索结果</span>
+  	<br><br>
+  	<span class="h3">&nbsp;&nbsp;&nbsp;&nbsp;的检索结果</span>
     <span class="h4">（ 共 {{counts}} 条 ）</span>
   </p>
 
@@ -39,18 +44,30 @@
 
   {% if counts > 0 %}
   {% for result in results %}
+  <!--("pk", "title", "date", "source", "content", "indexno", "documentno", "category", "region", "score", )-->
 
-  <div style="padding-top:20px; padding-bottom:20px ; background-color:#888888; border-radius:10px;">
+  <div style="padding-top:20px; padding-bottom:20px ; background-color:#2F2F2F; border-radius:10px;">
     <div class="row" style="height:10%;"></div>
       <div class="row" style="height:80%;">
         <div class="col-md-10 col-md-offset-1">
           <div class="card" style="width:85%; padding-left:10%;">
             <div class="card-body">
-              <p class="h4 card-title" style="font-size:22px;"><strong>{{result.title}}</strong></p>
-              <p class="h6 card-subtitle mb-2" style="font-size:14px;">{{result.date}} // score {{result.score}}</p>
-              <br style="">
-              <p class="card-text" style="font-size:16px;">{{ result.content | safe }}</p>
-              <a href="/search/details/{{result.pk}}" target="_blank" class="card-link" style="color:#FFFF00; font-size:16px;">（ 了解更多 ）</a>
+              <p class="h4 card-title" style="font-size:22px; color:whitesmoke;"><strong>{{result.title}}</strong></p>
+              <p class="h6 card-subtitle mb-2" style="font-size:14px; color:lightgray;">
+                {{result.date}} // {{result.source}}
+                {% if result.region %}
+                <span> ( {{result.region}} )</span>
+                {% endif %}
+              </p>
+              <p class="h6 card-subtitle mb-2" style="font-size:14px; color:lightgray;">
+                {% if result.documentno %}
+                {{result.documentno}} // 
+                {% endif %}
+                <span style="color:white;">{{result.category}}</span>
+              </p>
+              <br>
+              <p class="card-text" style="font-size:16px; color:lightgray;">{{ result.content | safe }}</p>
+              <a href="/search/details/{{result.pk}}" target="_blank" class="card-link" style="color:yellow; font-size:16px;">（ 了解更多 ）</a>
             </div>
           </div>
         </div>
@@ -63,7 +80,7 @@
     {% else %}
     <div style="padding-top:20px; padding-bottom:20px ; border-radius:10px;">
       <div class="row" style="height:10%;">
-        <h1 style="text-align:center; color:#FFFFFF;">无检索结果</h1>
+        <h1 style="text-align:center; color:white;">{{raw}}</h1>
       </div>
     </div>
     {% endif %}

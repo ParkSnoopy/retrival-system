@@ -10,9 +10,13 @@ from .views import (
     home, 
     details, 
 )
+from .view_tmp import (
+    home_yly, 
+)
 
 urlpatterns = [
-    path('<str:searchinput>', home, name='search-home'), 
+    path('', home, name='search-home'), 
     path('details/<int:article_pk>', details), 
     
+    path('yly/', home_yly), 
 ]

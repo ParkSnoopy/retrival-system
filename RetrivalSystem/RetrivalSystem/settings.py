@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'RetrivalSystem.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -114,7 +114,7 @@ DATABASES = {
         'PORT'     : os.environ["PGPORT"],
     }
 }
-'''
+
 
 
 # Password validation
@@ -162,8 +162,9 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 
 # PRODUCTION SETTINGS
@@ -181,6 +182,25 @@ CSRF_TRUSTED_ORIGINS = [
 
 STRFTIME_FORMAT = '%Y-%m-%d'
 ZH_STRFTIME_FMT = '%Y-%m-%d'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
