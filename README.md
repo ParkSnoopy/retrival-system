@@ -23,5 +23,8 @@
 * applied basic search algorithm
 * upgraded search result page
 * added result details page
+> 06.06
+* adopted boolean search
+* scored search & ordering algorithm deprecated
 
 ---
