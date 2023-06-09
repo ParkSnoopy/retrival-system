@@ -39,10 +39,10 @@ function addInputbox() {
 		    <select name="column-${counter}" style="text-align:center; background-color:gray; color:white;">
           <option value="全部字段" selected>全部字段</option>
           <option value="链接">链接</option>
-          <option value="主题">主题</option>
+          <option value="标题">标题</option>
           <option value="日期">日期</option>
           <option value="发文机构">发文机构</option>
-          <option value="内容">内容</option>
+          <option value="正文">正文</option>
           <option value="索引号">索引号</option>
           <option value="发文字号">发文字号</option>
           <option value="分类">分类</option>
