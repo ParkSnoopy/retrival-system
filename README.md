@@ -27,6 +27,8 @@
 ### 06.06
 * adopted boolean search
 * scored search & ordering algorithm deprecated
+### 06.10
+* tag analysis when creating records
 
 ---
 
