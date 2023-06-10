@@ -39,9 +39,9 @@ def read_and_create_from(filename):
         # Column1	url	title	date	source	article	indexno	doc_no	category	region
         *_, url, title, date, source, content, indexno, docno, category, region = next(reader)
         i = 0
-        print('\n')
+        # print('\n')
         for row in reader:
-            print(f"  creating row no.{i} ...", end="\r")
+            # print(f"  creating row no.{i} ...", end="\r")
             i += 1
             n, url, title, date, source, content, indexno, docno, category, region = row
             # print(f" processing row {n} ...")
@@ -84,7 +84,7 @@ def read_and_create_from(filename):
             article.save()
             
             # print(f"\n\n  object no.{article.pk} has created and saved\n\n{article}\n")
-        print('\n')
+        # print('\n')
     # update FULLDATAS
     FULLDATAS = Article.objects.all()
 
