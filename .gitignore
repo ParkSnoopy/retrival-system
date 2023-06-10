@@ -4,6 +4,10 @@
 *.env
 *.sqlite3
 
+# datas
+RetrivalSystem/_exported_data/*
+RetrivalSystem/database/data/remove/*
+
 # make sure static is always up to date
 RetrivalSystem/static/*
 
@@ -11,3 +15,5 @@ RetrivalSystem/static/*
 *.xlsx
 *.xmind
 *.mwb
+
+*.ipynb
