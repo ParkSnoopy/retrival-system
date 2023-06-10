@@ -56,6 +56,10 @@ INSTALLED_APPS = [
     # DATABASE
     'database', 
     
+    # UTILS
+    'localutils', 
+    'import_export', 
+    
     # HOSTING REQUIRED PKGS
     'whitenoise', 
 ]
@@ -103,6 +107,7 @@ DATABASES = {
     }
 }
 ALLOWED_HOSTS += ["127.0.0.1", ]
+DEBUG = True
 '''
 DATABASES = {
     'default': {

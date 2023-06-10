@@ -4,7 +4,7 @@
 from django.conf import settings
 
 from database.models import Article, Organization, Category, Region
-from .zh_normalizer.main import zh_normalize, zh_jieba_cut
+from localutils.normalizer.main import zh_normalize, zh_jieba_cut
 from .local_option import LOCAL_OPTION
 
 from collections import namedtuple

@@ -14,7 +14,7 @@ def home(request, status:str):
         'status': status, 
         'db_create_status': db_create_status, 
     })
-    print(f"{status=} {db_create_status=}")
+    # print(f"{status=} {db_create_status=}")
     if db_create_status:
         response.delete_cookie('db_create')
     
