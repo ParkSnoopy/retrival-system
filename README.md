@@ -29,11 +29,10 @@
 * scored search & ordering algorithm deprecated
 ### 06.10
 * tag analysis when creating records
+* added model import-export for processing cost
 
 ---
 
 ## OBJECTIVES
 
-- [X] update DB structure
-- [ ] preprocessed DB file migration
 
