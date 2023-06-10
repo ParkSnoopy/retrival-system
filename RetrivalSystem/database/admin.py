@@ -7,9 +7,9 @@ from .models import (
     Category, 
     Region, 
     
-    Tag, 
-    PrimaryTags, 
-    SecondaryTags, 
+    # Tag, 
+    # PrimaryTags, 
+    # SecondaryTags, 
 )
 
 from import_export.admin import ImportExportModelAdmin
@@ -31,11 +31,11 @@ class RegionAdmin(ImportExportModelAdmin, admin.ModelAdmin):...
 admin.site.register(Region, RegionAdmin)
 
 
-class TagAdmin(ImportExportModelAdmin, admin.ModelAdmin):...
-admin.site.register(Tag, TagAdmin)
+# class TagAdmin(ImportExportModelAdmin, admin.ModelAdmin):...
+# admin.site.register(Tag, TagAdmin)
 
-class PrimaryTagsAdmin(ImportExportModelAdmin, admin.ModelAdmin):...
-admin.site.register(PrimaryTags, PrimaryTagsAdmin)
+# class PrimaryTagsAdmin(ImportExportModelAdmin, admin.ModelAdmin):...
+# admin.site.register(PrimaryTags, PrimaryTagsAdmin)
 
-class SecondaryTagsAdmin(ImportExportModelAdmin, admin.ModelAdmin):...
-admin.site.register(SecondaryTags, SecondaryTagsAdmin)
+# class SecondaryTagsAdmin(ImportExportModelAdmin, admin.ModelAdmin):...
+# admin.site.register(SecondaryTags, SecondaryTagsAdmin)

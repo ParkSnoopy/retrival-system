@@ -11,9 +11,9 @@ from collections import namedtuple
 import numpy as np
 
 
-_allcolumns = ("title", "date", "source", "content", "indexno", "documentno", "category", "region")
+_allcolumns = ('url', "title", "date", "source_id", "content", "indexno", "documentno", "category_id", "region_id")
 ScoredObject = namedtuple("ScoredObject", ("obj", "score", ))
-ArticleTuple = namedtuple("ArticleTuple", ("pk", "title", "date", "source", "content", "indexno", "documentno", "category", "region", "score", ))
+ArticleTuple = namedtuple("ArticleTuple", ("pk", "title", "date", "source", "content", "indexno", "documentno", "category", "region", "score", "tags", ))
 YlyArticleTuple = namedtuple("YlyArticleTuple", ("url", "score", "title", "source", "date", "content"))
 _searchinputcolumns = ('andor', 'column', 'searchinput', )
 SearchInput = namedtuple("SearchInput", _searchinputcolumns)
@@ -119,6 +119,7 @@ def _article_parse(scoredobjects: list[ScoredObject], targetwords=None) -> list[
                 str(scoredobject.obj.category.name), 
                 str(scoredobject.obj.region.name), 
                 scoredobject.score, 
+                "、".join( scoredobject.obj.sec_tags if scoredobject.obj.sec_tags else scoredobject.obj.pri_tags ), 
             )
         )
     return results
@@ -156,7 +157,7 @@ def _yly_article_parse(scoredobjects: list[ScoredObject], targetwords=None) -> l
 
 
 '''
-<option value="全部字段" selected>全部字段</option>
+<option value="" selected></option>
 <option value="链接">链接</option>
 <option value="标题">标题</option>
 <option value="日期">日期</option>
@@ -173,7 +174,8 @@ COLUMN = {
     'region': 'region_id', 
 }
 ZH2EN = {
-    '全部字段': 'ALL', 
+    'pri_tags': 'pri_tags', 
+    'sec_tags': 'sec_tags',     
     '链接': 'url', 
     '标题': 'title', 
     '日期': 'date', 
@@ -202,6 +204,7 @@ MODEL = {
     'region_id': Region, 
 }
 def _str(obj, column, is_foreignkey) -> str:
+    column, is_foreignkey = _cleaned_column_name(column)
     content = obj.__dict__[column]
     if is_foreignkey:
         content = str(MODEL[column].objects.get(pk=content).name)
@@ -212,23 +215,51 @@ def _str(obj, column, is_foreignkey) -> str:
     return content
 
 def _filter_raw_objects_on_column(column:str, searchinput:str, _not=False) -> list[ScoredObject]:
-    objects = Article.objects.all()
+    searchinputs = zh_jieba_cut(searchinput)
+    articles = Article.objects.all()
     column, is_foreignkey = _cleaned_column_name(column)
     results = []
-    for obj in objects:
-        content: str = _str(obj, column, is_foreignkey)
-        count = content.count(searchinput)
-        if count > 0:
-            results.append(
-                ScoredObject(obj, count)
-            )
+    print(f"    searching with {searchinputs=} {column=} {is_foreignkey=}")
+    if column in _allcolumns:   print("      NOT tags")
+    else:                       print("      IS  tags")
+    for article in articles:
+        if column in _allcolumns: # '_allcolumns' does not include 'pri_tags' and 'sec_tags'
+            """
+            NOT TAGS
+            """
+            count = 0
+            for searchinput in searchinputs:
+                content: str = _str(article, column, is_foreignkey)
+                count += content.count(searchinput)
+            if count > 0:
+                results.append(
+                    ScoredObject(article, count)
+                )
+        else:
+            """
+            IS TAGS
+            """
+            count = 0
+            assert type(article.pri_tags) == type(article.sec_tags) == list, "not list"
+            for searchinput in searchinputs:
+                for tag in article.pri_tags:
+                    if searchinput in tag:
+                        count += 5
+                for tag in article.sec_tags:
+                    if searchinput in tag:
+                        count += 2
+            if count > 0:
+                results.append(
+                    ScoredObject(article, count)
+                )
     if _not:
         results = _reverse_result(results)
     results.sort(key=lambda x: x.score, reverse=True)
     return results
 
 def columnly_retrieve(column, searchinput, _return_objects=False, _not=False) -> list[ArticleTuple] | list[ScoredObject]:
-    filtered = _filter_raw_objects_on_column(
+    print(f"  call '_filter_raw_objects_on_column()' with {column=} {searchinput=}")
+    filtered: list[ScoredObject] = _filter_raw_objects_on_column(
         column, 
         searchinput, 
         _not=_not, 
@@ -266,15 +297,22 @@ def _multicolumn_retrieve(postdatas) -> list[SearchResult]:
     results = []
     for postdata in postdatas:
         is_not = ( postdata.andor == 'NOT' )
-        if postdata.column != '全部字段':
+        if postdata.column != '':
             *_, filtered = columnly_retrieve(postdata.column, postdata.searchinput, _return_objects=True, _not=is_not)
         else:
             filtered = set()
-            for column in _allcolumns:
+            for column in ('pri_tags', 'sec_tags', ):
                 *_, _filtered = columnly_retrieve(column, postdata.searchinput, _return_objects=True, _not=is_not)
                 filtered.update(_filtered)
             filtered = list(filtered)
             filtered.sort(key=lambda so: so.score, reverse=True)
+        # else:
+        #     filtered = set()
+        #     for column in _allcolumns:
+        #         *_, _filtered = columnly_retrieve(column, postdata.searchinput, _return_objects=True, _not=is_not)
+        #         filtered.update(_filtered)
+        #     filtered = list(filtered)
+        #     filtered.sort(key=lambda so: so.score, reverse=True)
         
         results.append(
             SearchResult(
@@ -300,42 +338,43 @@ def boolean_retrieve(postdatas) -> list[str: set]:
     results: list[SearchResult] = _multicolumn_retrieve(postdatas)
     results: set[ScoredObject] = _set_computation(results)
     results: list[ArticleTuple] = _article_parse(results)
+    results.sort(key=lambda at: at.date, reverse=True)
     results.sort(key=lambda at: at.score, reverse=True)
     return results
 
 
 
 
-def _normalize(scores: list[int]) -> list[np.float64]:
-    scores = list(scores)
-    minn, maxx = np.min(scores), np.max(scores)
-    _max = maxx - minn
-    for i, score in enumerate(scores):
-        scores[i] = ( score - minn ) / _max
-    return scores
+# def _normalize(scores: list[int]) -> list[np.float64]:
+#     scores = list(scores)
+#     minn, maxx = np.min(scores), np.max(scores)
+#     _max = maxx - minn
+#     for i, score in enumerate(scores):
+#         scores[i] = ( score - minn ) / _max
+#     return scores
 
-def _normalize_scoredobjects(objects: list[ScoredObject]) -> list[ScoredObject]:
-    scores = ( obj.score for obj in objects )
-    results = [
-        ScoredObject(
-            objects[i].obj, 
-            score, 
-        )
-        for i, score in enumerate(_normalize(scores))
-    ]
-    return results
+# def _normalize_scoredobjects(objects: list[ScoredObject]) -> list[ScoredObject]:
+#     scores = ( obj.score for obj in objects )
+#     results = [
+#         ScoredObject(
+#             objects[i].obj, 
+#             score, 
+#         )
+#         for i, score in enumerate(_normalize(scores))
+#     ]
+#     return results
 
-def filter_based_on_cluster(objects: list[ScoredObject], _yly=False) -> list[ScoredObject]:
-    objects = _normalize_scoredobjects(objects)
-    objects.sort(key=lambda obj: obj.score, reverse=True)
-    before = 1.0
-    for i, obj in enumerate(objects):
-        if before - obj.score > LOCAL_OPTION['cluster']['distance']:
-            i -= 1
-            break
-        before = obj.score
-    i += 1
-    return objects[:i], i
+# def filter_based_on_cluster(objects: list[ScoredObject], _yly=False) -> list[ScoredObject]:
+#     objects = _normalize_scoredobjects(objects)
+#     objects.sort(key=lambda obj: obj.score, reverse=True)
+#     before = 1.0
+#     for i, obj in enumerate(objects):
+#         if before - obj.score > LOCAL_OPTION['cluster']['distance']:
+#             i -= 1
+#             break
+#         before = obj.score
+#     i += 1
+#     return objects[:i], i
 
 
 
@@ -344,11 +383,15 @@ ARITHMETIC_MAP = {
     'OR' : '或', 
     'NOT': '非', 
 }
+def _columnname_of(postdata):
+    return postdata.column if postdata.column.strip() else '标签'
 def build_query_ish(postdatas):
     postdatas: list[SearchInput] = _pack_postdatas(postdatas)
-    buffer = f"( {postdatas[0].column} = {postdatas[0].searchinput} )"
+    column = column = _columnname_of(postdatas[0])
+    buffer = f"( {column} = {postdatas[0].searchinput} )"
     for postdata in postdatas[1:]:
-        buffer += f" {ARITHMETIC_MAP[postdata.andor]} ( {postdata.column} = {postdata.searchinput} )"
+        column = _columnname_of(postdata)
+        buffer += f" {ARITHMETIC_MAP[postdata.andor]} ( {column} = {postdata.searchinput} )"
     return buffer
 
 

@@ -22,7 +22,7 @@
     <option value="AND"></option>
   </select>
   <select name="column-00" hidden>
-    <option value="全部字段"></option>
+    <option value=""></option>
   </select>
   <input placeholder="检索" type="text" class="form-control" name="searchinput-00" style="scale:150%; text-align:center; width:100%; background-color:#222222; color:#DDDDDD;">
 </form>
@@ -64,6 +64,10 @@
                 {{result.documentno}} // 
                 {% endif %}
                 <span style="color:white;">{{result.category}}</span>
+                <!--<span style="color:white;"> // score {{result.score}}</span>-->
+              </p>
+              <p>
+                <span style="color:lightgray;">{{result.tags}}</span>
               </p>
               <br>
               <p class="card-text" style="font-size:16px; color:lightgray;">{{ result.content | safe }}</p>

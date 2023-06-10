@@ -5,6 +5,7 @@ import re
 import jieba
 import jieba.analyse as analyse
 
+analyse.set_stop_words('localutils/normalizer/STOPWORDS.txt')
 
 normalizer = TextNorm(
     to_lower = True,
@@ -24,7 +25,7 @@ def zh_normalize(text: str, _rm_nums=False) -> str:
 
 
 def zh_jieba_cut(text: str) -> list[str]:
-    return jieba.lcut(text)
+    return [ word.strip() for word in jieba.cut(text) if word.strip() ]
 
 
 def zh_extract_tags(text: str, topK=10) -> list[str]:

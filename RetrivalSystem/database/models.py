@@ -4,32 +4,32 @@ from django.db import models
 
 
 
-class Tag(models.Model):
+# class Tag(models.Model):
     
-    name = models.CharField(blank=False, null=False, max_length=1024)
+#     name = models.CharField(blank=False, null=False, max_length=1024)
     
-    def __str__(self):
-        return f"{self.pk} - {self.name}"
+#     def __str__(self):
+#         return f"{self.pk} - {self.name}"
 
 
-class PrimaryTags(models.Model):
+# class PrimaryTags(models.Model):
     
-    tags = models.ManyToManyField(Tag, blank=True)
+#     tags = models.ManyToManyField(Tag, blank=True)
     
-    def __str__(self):
-        return f"{self.pk} - {self.str()}"
-    def str(self):
-        return f"[ {' & '.join( tag.name for tag in self.tags.all() )} ]"
+#     def __str__(self):
+#         return f"{self.pk} - {self.str()}"
+#     def str(self):
+#         return f"[ {' & '.join( tag.name for tag in self.tags.all() )} ]"
 
 
-class SecondaryTags(models.Model):
+# class SecondaryTags(models.Model):
     
-    tags = models.ManyToManyField(Tag, blank=True)
+#     tags = models.ManyToManyField(Tag, blank=True)
     
-    def __str__(self):
-        return f"{self.pk} - {self.str()}"
-    def str(self):
-        return f"[ {' & '.join( tag.name for tag in self.tags.all() )} ]"
+#     def __str__(self):
+#         return f"{self.pk} - {self.str()}"
+#     def str(self):
+#         return f"[ {' & '.join( tag.name for tag in self.tags.all() )} ]"
 
 
 class Organization(models.Model):
@@ -70,8 +70,8 @@ class Article(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     region = models.ForeignKey(Region, on_delete=models.CASCADE, blank=True, null=True)
     
-    pri_tags = models.ForeignKey(PrimaryTags, on_delete=models.CASCADE, blank=False, null=False)
-    sec_tags = models.ForeignKey(SecondaryTags, on_delete=models.CASCADE, blank=False, null=False)
+    pri_tags = models.JSONField(blank=False, null=False, default=list) # models.ForeignKey(PrimaryTags, on_delete=models.CASCADE, blank=False, null=False)
+    sec_tags = models.JSONField(blank=False, null=False, default=list) # models.ForeignKey(SecondaryTags, on_delete=models.CASCADE, blank=False, null=False)
     
     def __str__(self):
         return (
@@ -86,7 +86,13 @@ class Article(models.Model):
             f"PRI_TAGs - {self.pri_tags}" + " || "
             f"SEC_TAGs - {self.sec_tags}"
         )
-
+    
+    @property
+    def pri_tags_str(self):
+        return '、'.join( tag for tag in self.pri_tags )
+    @property
+    def sec_tags_str(self):
+        return '、'.join( tag for tag in self.sec_tags )
 
 
 

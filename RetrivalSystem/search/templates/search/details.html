@@ -26,6 +26,20 @@
   <div class="row" style="height:10%;"></div>
   {% if exist %}
 
+  {% if article.pri_tags %}
+  <h3 style="color:#BBBBBB">
+    <span style="color:#888888;">主要标签：</span>
+    <span style="color:greenyellow;">{{article.pri_tags_str}}</span>
+  </h3>
+  {% endif %}
+  {% if article.sec_tags %}
+  <h3 style="color:#BBBBBB">
+    <span style="color:#888888;">次要标签：</span>
+    <span style="color:white;">{{article.sec_tags_str}}</span>
+  </h3>
+  {% endif %}
+  <br>
+
   {% if article.indexno %}
   <h4 style="color:#BBBBBB; padding-bottom:8px;">
     <span style="color:#888888; ">索引号：</span>
@@ -54,6 +68,7 @@
     <span style="color:#888888; ">日期：</span>
     <span>{{date}}</span>
   </h3>
+  <br>
   <h1 style="color:#BBBBBB">{{article.title}}</h1>
   <h2 style="color:whitesmoke;">{{article.category.name}}</h2>
   <br>
@@ -65,7 +80,7 @@
   {% for content in contents %}
   <p class="h4" style="color:#FFFFFF; line-height:1.5; padding-top:16px; ">{{content}}</p>
   {% endfor %}
-  <div style="height:80vh"></div>
+  <div style="height:50vh"></div>
 
   {% else %}
   <div style="padding-top:20px; padding-bottom:20px ; border-radius:10px;">

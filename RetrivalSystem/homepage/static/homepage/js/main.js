@@ -37,7 +37,7 @@ function addInputbox() {
 		  </div>
 		  <div class="input-group-addon" style="width:20%; background-color:gray; padding:0;">
 		    <select name="column-${counter}" style="text-align:center; background-color:gray; color:white;">
-          <option value="全部字段" selected>全部字段</option>
+          <option value="" selected></option>
           <option value="链接">链接</option>
           <option value="标题">标题</option>
           <option value="日期">日期</option>
