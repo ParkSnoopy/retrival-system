@@ -5,6 +5,10 @@ import re
 import jieba
 import jieba.analyse as analyse
 
+from django.conf import settings
+
+jieba.dt.tmp_dir = settings.BASE_DIR / 'cache' / 'jieba'
+
 analyse.set_stop_words('localutils/normalizer/STOPWORDS.txt')
 
 normalizer = TextNorm(

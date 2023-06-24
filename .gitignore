@@ -8,8 +8,7 @@
 RetrivalSystem/_exported_data/*
 #RetrivalSystem/database/data/*
 #RetrivalSystem/database/db_control.py
-
-
+RetrivalSystem/cache/jieba/jieba.cache
 
 # make sure static is always up to date
 RetrivalSystem/static/*
@@ -19,6 +18,7 @@ RetrivalSystem/static/*
 *.xmind
 *.mwb
 
+# some temp files
 *.ipynb
 RetrivalSystem/search/信息存储与检索 检索系统.py
 DROP_TABLEs.txt
