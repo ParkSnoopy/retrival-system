@@ -7,7 +7,7 @@
 # datas
 RetrivalSystem/_exported_data/*
 RetrivalSystem/database/data/*
-RetrivalSystem/database/db_control.py
+RetrivalSystem/database/db_control_deprecated.py
 RetrivalSystem/cache/jieba/jieba.cache
 
 # make sure static is always up to date
