@@ -6,7 +6,10 @@
 
 # datas
 RetrivalSystem/_exported_data/*
-RetrivalSystem/database/data/remove/*
+#RetrivalSystem/database/data/*
+#RetrivalSystem/database/db_control.py
+
+
 
 # make sure static is always up to date
 RetrivalSystem/static/*
