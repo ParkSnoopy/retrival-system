@@ -219,9 +219,9 @@ def _filter_raw_objects_on_column(column:str, searchinput:str, _not=False) -> li
     articles = Article.objects.all()
     column, is_foreignkey = _cleaned_column_name(column)
     results = []
-    print(f"    searching with {searchinputs=} {column=} {is_foreignkey=}")
-    if column in _allcolumns:   print("      NOT tags")
-    else:                       print("      IS  tags")
+    # print(f"    searching with {searchinputs=} {column=} {is_foreignkey=}")
+    # if column in _allcolumns:   print("      NOT tags")
+    # else:                       print("      IS  tags")
     for article in articles:
         if column in _allcolumns: # '_allcolumns' does not include 'pri_tags' and 'sec_tags'
             """
@@ -258,7 +258,7 @@ def _filter_raw_objects_on_column(column:str, searchinput:str, _not=False) -> li
     return results
 
 def columnly_retrieve(column, searchinput, _return_objects=False, _not=False) -> list[ArticleTuple] | list[ScoredObject]:
-    print(f"  call '_filter_raw_objects_on_column()' with {column=} {searchinput=}")
+    # print(f"  call '_filter_raw_objects_on_column()' with {column=} {searchinput=}")
     filtered: list[ScoredObject] = _filter_raw_objects_on_column(
         column, 
         searchinput, 
